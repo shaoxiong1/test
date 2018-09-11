@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/itmes")
@@ -30,30 +31,17 @@ public class ItemsController {
     }
 
     @RequestMapping("/queryItems")
-    public String queryItems(/*Integer id,
-                             String name,
-                             Float price,
-                             Date createtime,
-                             String detail,*/
-                             Items items,
-                             MultipartFile pictureFile,
-                             HttpServletRequest request) throws IOException {
-
+    public String queryItems(Items items,MultipartFile pictureFile,HttpServletRequest request) throws IOException {
         String path = request.getSession().getServletContext().getRealPath("/pic/");
         File file = new File(path);
         if(!file.exists()){
             file.mkdirs();
         }
         String filename = pictureFile.getOriginalFilename();
+        filename=UUID.randomUUID().toString().replaceAll("-","")+filename.substring(filename.lastIndexOf(".")-1);
         pictureFile.transferTo(new File(path,filename));
         items.setPic(filename);
-        /*Items items=new Items();
-        items.setId(id);
-        items.setPic(filename);p
-        items.setName(name);
-        items.setPrice(price);
-        items.setDetail(detail);
-        items.setCreatetime(createtime);*/
+
         itemsService.updateItems(items);
         return "redirect:findAll.do";
     }
