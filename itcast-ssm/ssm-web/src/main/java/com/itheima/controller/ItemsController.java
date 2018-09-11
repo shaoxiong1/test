@@ -30,11 +30,7 @@ public class ItemsController {
     }
 
     @RequestMapping("/queryItems")
-    public String queryItems(/*Integer id,
-                             String name,
-                             Float price,
-                             Date createtime,
-                             String detail,*/
+    public String queryItems(
                              Items items,
                              MultipartFile pictureFile,
                              HttpServletRequest request) throws IOException {
@@ -47,13 +43,7 @@ public class ItemsController {
         String filename = pictureFile.getOriginalFilename();
         pictureFile.transferTo(new File(path,filename));
         items.setPic(filename);
-        /*Items items=new Items();
-        items.setId(id);
-        items.setPic(filename);p
-        items.setName(name);
-        items.setPrice(price);
-        items.setDetail(detail);
-        items.setCreatetime(createtime);*/
+       
         itemsService.updateItems(items);
         return "redirect:findAll.do";
     }
